@@ -1,0 +1,15 @@
+# Capacitor: web assets copied by `cap sync` (rebuilt in CI)
+App/public/
+App/capacitor.config.json
+capacitor-cordova-ios-plugins/
+
+# CocoaPods (installed by `cap sync`)
+Pods/
+
+# Xcode build output
+DerivedData/
+build/
+*.xcarchive
+*.ipa
+*.dSYM.zip
+xcuserdata/

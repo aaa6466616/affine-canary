@@ -1,0 +1,44 @@
+# Ignore file for .github/deployment/node/Dockerfile.local.
+# Same as the repo root .dockerignore, except /node_modules is INCLUDED because
+# this Dockerfile copies it into the image directly.
+.git
+.github/**/*.md
+.gitignore
+
+# Build artifacts not needed by the server image
+/target
+/.yarn/cache
+/.yarn/unplugged
+/.yarn/install-state.gz
+/.pnp.*
+
+# Workspaces that the server image never uses
+blocksuite
+docs
+tests
+tools
+packages/common
+packages/frontend/apps/android
+packages/frontend/apps/ios
+packages/frontend/apps/electron
+packages/frontend/apps/electron-renderer
+packages/frontend/apps/mobile/src
+packages/frontend/core
+packages/frontend/component
+packages/frontend/i18n
+packages/frontend/native
+packages/frontend/electron-api
+packages/frontend/templates
+
+# Local dependency/build artifacts
+/test-results
+/playwright-report
+/coverage
+/.coverage
+/.render
+/.devcontainer
+/.codesandbox
+/.vscode
+
+# OS noise
+.DS_Store
