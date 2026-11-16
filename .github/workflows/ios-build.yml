@@ -41,6 +41,11 @@ on:
         required: false
         type: string
         default: ''
+      include-app-groups:
+        description: 'Keep the App Group entitlement (requires group.com.feihu1201.iaffine registered in the developer portal)'
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -119,6 +124,19 @@ jobs:
 
       - name: Capacitor sync (runs pod install)
         run: yarn workspace @affine/ios sync
+
+      # The App Group identifier must exist in the developer portal before a
+      # profile can carry the entitlement. Until it does, drop it so the app
+      # still builds and runs (the share-extension inbox degrades gracefully).
+      - name: Strip App Group entitlement (temporary)
+        if: ${{ !inputs.include-app-groups }}
+        working-directory: packages/frontend/apps/ios/App
+        run: |
+          set -euo pipefail
+          for f in App/App.entitlements ShareExtension/ShareExtension.entitlements; do
+            /usr/libexec/PlistBuddy -c "Delete :com.apple.security.application-groups" "$f" || true
+          done
+          echo "App entitlements:"; cat App/App.entitlements
 
       - name: Setup Rust iOS target
         uses: ./.github/actions/build-rust
