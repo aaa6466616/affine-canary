@@ -13,7 +13,7 @@ interface AppConfig {
 }
 
 const config: CapacitorConfig & AppConfig = {
-  appId: 'com.feihu1201.affine',
+  appId: 'com.feihu1201.iaffine',
   appName: 'AFFiNE',
   webDir: 'dist',
   affineVersion: packageJson.version,

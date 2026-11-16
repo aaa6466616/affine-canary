@@ -48,7 +48,7 @@ permissions:
 env:
   BUILD_TYPE: ${{ inputs.build-type }}
   APPLE_TEAM_ID: 8DQ2M68TNF
-  APP_BUNDLE_ID: com.feihu1201.affine
+  APP_BUNDLE_ID: com.feihu1201.iaffine
 
 jobs:
   build-web:

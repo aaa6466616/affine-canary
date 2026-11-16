@@ -6,7 +6,7 @@
 import Foundation
 
 enum ShareInboxConstants {
-  static let appGroupId = "group.com.feihu1201.affine"
+  static let appGroupId = "group.com.feihu1201.iaffine"
   static let workspaceModeFileName = "share-workspace-mode.json"
   static let inboxDirectoryName = "ShareInbox"
   static let attachmentsDirectoryName = "Attachments"

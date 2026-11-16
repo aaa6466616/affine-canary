@@ -1,6 +1,6 @@
 # 用自己的 Apple 团队构建 iOS 包
 
-这个 fork 把 iOS 工程的签名改成了 `com.feihu1201.affine` / 团队 `8DQ2M68TNF`，
+这个 fork 把 iOS 工程的签名改成了 `com.feihu1201.iaffine` / 团队 `8DQ2M68TNF`，
 并用独立的 GitHub Actions workflow（`.github/workflows/ios-build.yml`）在
 macOS runner 上构建、签名、导出 IPA，可选上传 TestFlight。
 
@@ -11,11 +11,11 @@ macOS runner 上构建、签名、导出 IPA，可选上传 TestFlight。
 
 | 位置 | 上游值 | 现在 |
 | --- | --- | --- |
-| App bundle id | `app.affine.pro` | `com.feihu1201.affine` |
-| ShareExtension | `app.affine.pro.ShareExtension` | `com.feihu1201.affine.ShareExtension` |
-| 单元测试 | `app.affine.pro.tests` | `com.feihu1201.affine.tests` |
+| App bundle id | `app.affine.pro` | `com.feihu1201.iaffine` |
+| ShareExtension | `app.affine.pro.ShareExtension` | `com.feihu1201.iaffine.ShareExtension` |
+| 单元测试 | `app.affine.pro.tests` | `com.feihu1201.iaffine.tests` |
 | Development Team | `73YMMDVT2M` | `8DQ2M68TNF` |
-| App Group | `group.app.affine.pro` | `group.com.feihu1201.affine` |
+| App Group | `group.app.affine.pro` | `group.com.feihu1201.iaffine` |
 | 签名方式 | Manual（写死 TOEVERYTHING 证书） | Automatic |
 
 App Group 同时改了 `App/App/App.entitlements`、`ShareExtension.entitlements`
@@ -64,17 +64,17 @@ base64 -w0 dist.p12
 
 ## App ID / App Group
 
-自动签名通常会在首次构建时自动创建 App ID 和 `group.com.feihu1201.affine`。
+自动签名通常会在首次构建时自动创建 App ID 和 `group.com.feihu1201.iaffine`。
 如果 CI 报 capability 错误，在开发者门户手动补：
 
-- App ID：`com.feihu1201.affine`（Capabilities 勾选 App Groups）
-- App ID：`com.feihu1201.affine.ShareExtension`（同样勾选 App Groups）
-- App Group：`group.com.feihu1201.affine`，并把上面两个 App ID 都加进去
+- App ID：`com.feihu1201.iaffine`（Capabilities 勾选 App Groups）
+- App ID：`com.feihu1201.iaffine.ShareExtension`（同样勾选 App Groups）
+- App Group：`group.com.feihu1201.iaffine`，并把上面两个 App ID 都加进去
 
 ## 首次 TestFlight
 
 TestFlight 上传要求 App Store Connect 里已经存在 bundle id 为
-`com.feihu1201.affine` 的 App 记录。可以先在 App Store Connect → App 里
+`com.feihu1201.iaffine` 的 App 记录。可以先在 App Store Connect → App 里
 新建一个（名称随意，SKU 唯一），再跑 workflow。
 
 首次构建上传后，TestFlight 会显示"缺少合规性信息"，在 App Store Connect

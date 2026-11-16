@@ -1,4 +1,4 @@
-app_identifier("com.feihu1201.affine") # The bundle identifier of your app
+app_identifier("com.feihu1201.iaffine") # The bundle identifier of your app
 
 # The team used for signing. This fork builds with its own Apple Developer team
 # (see BUILD-OWN-TEAM.md); the upstream team/provisioning settings do not apply.
