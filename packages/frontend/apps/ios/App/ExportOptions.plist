@@ -7,7 +7,16 @@
 	<key>teamID</key>
 	<string>8DQ2M68TNF</string>
 	<key>signingStyle</key>
-	<string>automatic</string>
+	<string>manual</string>
+	<key>signingCertificate</key>
+	<string>iPhone Distribution</string>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>com.feihu1201.iaffine</key>
+		<string>AFFiNE CI App Store</string>
+		<key>com.feihu1201.iaffine.ShareExtension</key>
+		<string>AFFiNE CI ShareExtension</string>
+	</dict>
 	<key>destination</key>
 	<string>export</string>
 	<key>uploadSymbols</key>
