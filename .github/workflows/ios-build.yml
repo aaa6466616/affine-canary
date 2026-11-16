@@ -49,6 +49,9 @@ env:
   BUILD_TYPE: ${{ inputs.build-type }}
   APPLE_TEAM_ID: 8DQ2M68TNF
   APP_BUNDLE_ID: com.feihu1201.iaffine
+  # The imported certificate is a distribution certificate whose CN starts with
+  # "iPhone Distribution"; keep the identity string aligned with it.
+  CODE_SIGN_IDENTITY_NAME: iPhone Distribution
 
 jobs:
   build-web:
@@ -174,7 +177,7 @@ jobs:
             -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
             CODE_SIGN_STYLE=Automatic \
-            CODE_SIGN_IDENTITY="Apple Distribution" \
+            CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY_NAME" \
             CURRENT_PROJECT_VERSION="$BUILD_NUMBER" \
             $MARKETING_SETTING \
             archive
