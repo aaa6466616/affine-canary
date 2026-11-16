@@ -149,6 +149,16 @@ jobs:
           p12-file-base64: ${{ secrets.BUILD_CERTIFICATE_BASE64 }}
           p12-password: ${{ secrets.BUILD_CERTIFICATE_PASSWORD }}
 
+      - name: Install provisioning profiles
+        env:
+          APP_PROFILE: ${{ secrets.APP_PROVISIONING_PROFILE_BASE64 }}
+          EXT_PROFILE: ${{ secrets.EXTENSION_PROVISIONING_PROFILE_BASE64 }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          echo "$APP_PROFILE" | base64 --decode > "$HOME/Library/MobileDevice/Provisioning Profiles/affine-app.mobileprovision"
+          echo "$EXT_PROFILE" | base64 --decode > "$HOME/Library/MobileDevice/Provisioning Profiles/affine-ext.mobileprovision"
+
       - name: Prepare App Store Connect API key
         env:
           ASC_KEY: ${{ secrets.APPLE_STORE_CONNECT_API_KEY }}
@@ -186,12 +196,7 @@ jobs:
             -configuration Release \
             -destination 'generic/platform=iOS' \
             -archivePath "$RUNNER_TEMP/App.xcarchive" \
-            -allowProvisioningUpdates \
-            -authenticationKeyPath "$RUNNER_TEMP/private_keys/AuthKey_${ASC_KEY_ID}.p8" \
-            -authenticationKeyID "$ASC_KEY_ID" \
-            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
-            CODE_SIGN_STYLE=Automatic \
             CURRENT_PROJECT_VERSION="$BUILD_NUMBER" \
             $MARKETING_SETTING \
             archive
@@ -204,11 +209,7 @@ jobs:
             -exportArchive \
             -archivePath "$RUNNER_TEMP/App.xcarchive" \
             -exportOptionsPlist ExportOptions.plist \
-            -exportPath "$RUNNER_TEMP/export" \
-            -allowProvisioningUpdates \
-            -authenticationKeyPath "$RUNNER_TEMP/private_keys/AuthKey_${ASC_KEY_ID}.p8" \
-            -authenticationKeyID "$ASC_KEY_ID" \
-            -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+            -exportPath "$RUNNER_TEMP/export"
           ls -l "$RUNNER_TEMP/export"
 
       - name: Upload IPA artifact
