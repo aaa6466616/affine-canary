@@ -1,0 +1,27 @@
+name: ISO8601 parse test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: macos-15
+    timeout-minutes: 10
+    steps:
+      - name: Parse 6-digit fractional seconds with Foundation
+        run: |
+          cat > "$RUNNER_TEMP/t.swift" <<'EOF'
+          import Foundation
+          let values = [
+            "2026-12-17T06:53:57.685161Z",
+            "2026-12-17T06:53:57.685Z",
+            "2026-12-17T06:53:57Z",
+          ]
+          let fractional = ISO8601DateFormatter()
+          fractional.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+          let plain = ISO8601DateFormatter()
+          for v in values {
+            print(v, "| fractional:", fractional.date(from: v) as Any, "| plain:", plain.date(from: v) as Any)
+          }
+          EOF
+          swift "$RUNNER_TEMP/t.swift"
