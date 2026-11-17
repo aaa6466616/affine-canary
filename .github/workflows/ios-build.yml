@@ -143,10 +143,6 @@ jobs:
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" App/Info.plist
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" ShareExtension/Info.plist
 
-      - name: Print app Info.plist (debug)
-        working-directory: packages/frontend/apps/ios/App
-        run: /usr/libexec/PlistBuddy -c Print App/Info.plist | head -100
-
       - name: Setup Rust iOS target
         uses: ./.github/actions/build-rust
         with:
