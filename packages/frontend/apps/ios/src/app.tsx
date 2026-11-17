@@ -261,10 +261,22 @@ framework.scope(ServerScope).override(AuthProvider, resolver => {
       return {};
     },
     async signInPassword(credential) {
-      await Auth.signInPassword({
-        endpoint,
-        ...credential,
-      });
+      try {
+        await Auth.signInPassword({
+          endpoint,
+          ...credential,
+        });
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : typeof error === 'object' && error
+              ? JSON.stringify(error)
+              : String(error);
+        // Surface the endpoint and the raw native error in the UI while
+        // debugging self-hosted sign-in on iOS.
+        throw new Error(`[native-auth] endpoint=${endpoint} error=${message}`);
+      }
     },
     async signInOpenAppSignInCode(code) {
       await Auth.signInOpenApp({
