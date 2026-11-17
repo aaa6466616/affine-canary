@@ -558,7 +558,7 @@ public class AuthPlugin: CAPPlugin, CAPBridgedPlugin {
   private func fetch(
     _ endpoint: String, method: String, action: String, headers: [String: String?], body: Encodable?
   ) async throws -> (Data, HTTPURLResponse) {
-    guard let targetUrl = URL(string: "\(endpoint)\(action)") else {
+    guard let targetUrl = URL(string: "\(canonicalEndpoint(endpoint))\(action)") else {
       throw AuthError.invalidEndpoint
     }
 
