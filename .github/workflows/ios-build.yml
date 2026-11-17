@@ -229,7 +229,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: affine-ios-ipa
-          path: ${{ runner.temp }}/export/*.ipa
+          path: |
+            ${{ runner.temp }}/export/*.ipa
+            ${{ runner.temp }}/export/AppStoreInfo.plist
           retention-days: 14
 
       - name: Upload to TestFlight
