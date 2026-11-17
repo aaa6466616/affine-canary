@@ -135,6 +135,19 @@ jobs:
           done
           echo "App entitlements:"; cat App/App.entitlements
 
+      # The app's Info.plist pins CFBundleVersion to a literal; the extension
+      # uses $(CURRENT_PROJECT_VERSION). Force both to the same value so App
+      # Store Connect accepts the pair.
+      - name: Set build number
+        working-directory: packages/frontend/apps/ios/App
+        env:
+          INPUT_BUILD_NUMBER: ${{ inputs.build-number }}
+        run: |
+          set -euo pipefail
+          BUILD_NUMBER="${INPUT_BUILD_NUMBER:-${{ github.run_number }}}"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" App/Info.plist
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" ShareExtension/Info.plist
+
       - name: Setup Rust iOS target
         uses: ./.github/actions/build-rust
         with:
@@ -226,8 +239,10 @@ jobs:
           set -euo pipefail
           bundle config set --local path vendor/bundle
           bundle install
+          IPA_PATH="$(ls "$RUNNER_TEMP/export"/*.ipa | head -n 1)"
+          echo "Uploading $IPA_PATH"
           bundle exec fastlane pilot upload \
-            --ipa "$RUNNER_TEMP/export/App.ipa" \
+            --ipa "$IPA_PATH" \
             --app_identifier "$APP_BUNDLE_ID" \
             --api_key_path "$RUNNER_TEMP/asc_key.json" \
             --skip_waiting_for_build_processing true
