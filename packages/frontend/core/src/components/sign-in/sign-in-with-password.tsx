@@ -49,7 +49,6 @@ export const SignInWithPasswordStep = ({
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorHint, setPasswordErrorHint] = useState('');
-  const [debugMessage, setDebugMessage] = useState('');
   const captchaService = useService(CaptchaService);
   const serverService = useService(ServerService);
   const isSelfhosted = useLiveData(
@@ -99,8 +98,6 @@ export const SignInWithPasswordStep = ({
     } catch (err) {
       console.error(err);
       const error = UserFriendlyError.fromAny(err);
-      const rawMessage = err instanceof Error ? err.message : String(err);
-      setDebugMessage(`[${error.name}] ${rawMessage}`);
 
       if (
         error.is('WRONG_SIGN_IN_CREDENTIALS') ||
@@ -112,7 +109,9 @@ export const SignInWithPasswordStep = ({
         setPasswordError(false);
         notify.error({
           title: t['com.affine.auth.toast.title.failed'](),
-          message: `[${error.name}] ${rawMessage}`,
+          message: error.is('REQUEST_ABORTED')
+            ? t['error.NETWORK_ERROR']()
+            : t[`error.${error.name}`](error.data),
         });
       }
       captchaService.revalidate();
@@ -143,9 +142,6 @@ export const SignInWithPasswordStep = ({
       />
 
       <AuthContent>
-        <div style={{ fontSize: 12, opacity: 0.6, wordBreak: 'break-all' }}>
-          {serverService.server.baseUrl}
-        </div>
         <form
           onSubmit={event => {
             event.preventDefault();
@@ -190,18 +186,6 @@ export const SignInWithPasswordStep = ({
             {t['com.affine.auth.sign.in']()}
           </Button>
         </form>
-        {debugMessage ? (
-          <div
-            style={{
-              fontSize: 12,
-              color: '#eb5757',
-              wordBreak: 'break-all',
-              whiteSpace: 'pre-wrap',
-            }}
-          >
-            {debugMessage}
-          </div>
-        ) : null}
         {!isSelfhosted && (
           <div className={styles.passwordButtonRow}>
             <a
