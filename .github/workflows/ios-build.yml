@@ -114,11 +114,6 @@ jobs:
         with:
           xcode-version: '26.2'
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.3'
-
       - name: Capacitor sync (runs pod install)
         run: yarn workspace @affine/ios sync
 
@@ -239,12 +234,13 @@ jobs:
         working-directory: packages/frontend/apps/ios/App
         run: |
           set -euo pipefail
-          bundle config set --local path vendor/bundle
-          bundle install
-          IPA_PATH="$(ls "$RUNNER_TEMP/export"/*.ipa | head -n 1)"
-          echo "Uploading $IPA_PATH"
-          bundle exec fastlane pilot upload \
-            --ipa "$IPA_PATH" \
-            --app_identifier "$APP_BUNDLE_ID" \
-            --api_key_path "$RUNNER_TEMP/asc_key.json" \
-            --skip_waiting_for_build_processing true
+          mkdir -p "$RUNNER_TEMP/upload"
+          xcodebuild \
+            -exportArchive \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            -exportOptionsPlist ExportOptions-upload.plist \
+            -exportPath "$RUNNER_TEMP/upload" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$RUNNER_TEMP/private_keys/AuthKey_${ASC_KEY_ID}.p8" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID"
